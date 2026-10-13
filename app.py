@@ -26,7 +26,8 @@ def get_students():
 
 @app.route("/students/<int:student_id>", methods=["GET"])
 def get_student(student_id):
-    for student in students:
+    for student in students: 
+        # Iterates through all ID's until found, then returns corresponding student
         if student["id"] == student_id:
             return jsonify(student), 200
 
@@ -37,14 +38,15 @@ def get_student(student_id):
 def post_student():
     data = request.get_json(silent=True)
 
-    if (
+    if ( 
+        # Checks that the argument is in a valid format and that the student has name and major
         not isinstance(data, dict)
         or not data.get("name")
         or not data.get("major")
     ):
         return jsonify({"error": "Need name and major"}), 400
     
-    new_id = max(
+    new_id = max( # Assigns next available integer ID
         (student["id"] for student in students), default = 0
     ) + 1
     
@@ -60,10 +62,10 @@ def post_student():
 
 @app.route("/students/<int:student_id>", methods=["DELETE"])
 def delete_student(student_id):
-    for student in students:
+    for student in students: 
+        # Iterate through every student id until found, then removes the corresponding student
             if student["id"] == student_id:
                 students.remove(student)
-                
                 return jsonify({"message": f"Student id {student_id} has been deleted."}), 200
                 
     return jsonify({"error": f"Student id {student_id} does not exist"}), 404
