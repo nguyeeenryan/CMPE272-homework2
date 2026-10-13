@@ -1,27 +1,27 @@
-apiVersion: apps/v1                 
-kind: Deployment                   
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: student-api          
-  labels:
-    app: student-web-server                 
-spec:                               
-  replicas: 2                       
+  name: student-api
+spec:
+  replicas: 2
   selector:
     matchLabels:
-      app: student-api                 
-  template:                         
+      app: student-api
+  template:
     metadata:
       labels:
-        app: student-api              
+        app: student-api
     spec:
       containers:
-      - name: student-api                
-        image: student-api:1.0     
-        ports:
-          - containerPort: 5000      
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 5000
-            initialDelayseconds: 5
-            PeriodSeconds: 15  
+        - name: student-api
+          image: student-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 15
+

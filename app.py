@@ -25,11 +25,12 @@ def get_students():
     return jsonify(students), 200
 
 @app.route("/students/<int:student_id>", methods=["GET"])
-def get_student(s_id):
+def get_student(student_id):
     for student in students:
-        if student["id"] == s_id:
+        if student["id"] == student_id:
             return jsonify(student), 200
-    return jsonify({"error": "Student does not exist"}), 404
+
+    return jsonify({"error": "Student not found"}), 404
 
 
 @app.route("/students", methods=["POST"])
@@ -41,7 +42,7 @@ def post_student():
         or not data.get("name")
         or not data.get("major")
     ):
-        return jsonify({"error: Need name and major"}), 400
+        return jsonify({"error": "Need name and major"}), 400
     
     new_id = max(
         (student["id"] for student in students), default = 0
@@ -58,14 +59,14 @@ def post_student():
     return jsonify(new_student), 201
 
 @app.route("/students/<int:student_id>", methods=["DELETE"])
-def delete_student(s_id):
+def delete_student(student_id):
     for student in students:
-            if student["id"] == s_id:
+            if student["id"] == student_id:
                 students.remove(student)
                 
-                return jsonify({"message": f"Student id {s_id} has been deleted"}), 200
+                return jsonify({"message": f"Student id {student_id} has been deleted."}), 200
                 
-    return jsonify({"error": f"Student id {s_id} does not exist"}), 404
+    return jsonify({"error": f"Student id {student_id} does not exist"}), 404
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
